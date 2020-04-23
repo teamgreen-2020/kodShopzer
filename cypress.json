@@ -1,0 +1,10 @@
+{
+    "baseUrl": "http://localhost:8080",
+    "env": {
+        "email": "tolvan@mailinator.com",
+        "password": "password12",
+        "first_name": "Tolvan",
+        "last_name": "Tolvansson"
+    }
+
+}
