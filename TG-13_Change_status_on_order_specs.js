@@ -1,14 +1,18 @@
+/**
+ * Author: Niklas
+ */
+
 describe('TG-13 Som admin vill jag ändra status på lagd order', () => {
 
     it('sets order status "delivered" on most recent order', () => {
     //beforeEach(() => { 
         //VILL HELST HA before(), MEN BLIR UTSLÄNGD!
-        cy.visit('/admin')
+        cy.visit('/admin/logon.html')
 
         //LOGIN
         cy  .get(':nth-child(1) > .controls > #username')
-            .type('admin')
-            .should('have.value', 'admin')
+            .type('admin@shopizer.com')
+            .should('have.value', 'admin@shopizer.com')
 
         cy  .get('[name=password]')
             .type('password')
