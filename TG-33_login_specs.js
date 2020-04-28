@@ -1,3 +1,7 @@
+/**
+ * Author: Niklas
+ */
+
 describe('/login', () => {
 
     beforeEach(() => cy.visit('/shop/customer/customLogon.html'))
