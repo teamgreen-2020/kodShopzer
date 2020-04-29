@@ -66,7 +66,14 @@ describe('shopizer 2.11 admin test', ()=>{
           .should('have.value', 'you will have ur refund next week on monday')
 
         cy.get('.form-actions > .btn')
-          .click() 
+          .click()
+
+	cy.get('.lead')
+          .should('have.text', 'refunded')
+
+        cy.get('#store\\.success')
+          .eq(0)
+          .should('have.text', 'Request completed with success')  
 
         //cy.get('#store\\.success').should('have.text', 'Request completed with success')
         
