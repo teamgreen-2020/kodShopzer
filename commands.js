@@ -72,6 +72,26 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
         .and('have.value', Cypress.env('password'))
 })
 
+//********************************************************************************* */
+
+/**
+ * Author: Aris
+ */ 
+
+// Admin inloggningsuppgifter till TG-26 och TG-13
+
+Cypress.Commands.add('loginAdmin', () => { 
+    cy.visit('http://localhost:8080/admin/')
+    cy.get(':nth-child(1) > .controls > #username').type('admin@shopizer.com')
+    cy.get('#password').type('password')
+    cy.get('#remember').check()
+    cy.get('#formSubmitButton').click()
+    cy.url().should('include', '/home.html')
+
+})
+
+//********************************************************************************* */
+
 /**
  * 
  * OBS! 
