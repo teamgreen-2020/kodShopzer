@@ -76,14 +76,6 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
 
 
 
-// xit('Niklas test login GUI',  ()=> {
-//     cy.visit('http://localhost:8080/shop/customer/customLogon.html')
-//     cy.get('#signin_userName').type('tomas@helmfridsson.se')
-//     cy.get('#signin_password').type('password{enter}')
-//     cy.wait(700)
-//     cy.getCookie('user').should('exist')
-// });
-
 Cypress.Commands.add('customerLoginAPI', (user, psw) => {
     cy.request({
         method:'POST',
@@ -106,11 +98,25 @@ Cypress.Commands.add('customerLoginAPI', (user, psw) => {
     });
 
 
+//********************************************************************************* */
 
+/**
+ * Author: Aris
+ */ 
 
+// Admin inloggningsuppgifter till TG-26 och TG-13
 
+Cypress.Commands.add('loginAdmin', () => { 
+    cy.visit('http://localhost:8080/admin/')
+    cy.get(':nth-child(1) > .controls > #username').type('admin@shopizer.com')
+    cy.get('#password').type('password')
+    cy.get('#remember').check()
+    cy.get('#formSubmitButton').click()
+    cy.url().should('include', '/home.html')
 
+})
 
+//********************************************************************************* */
 
 /**
  * 
