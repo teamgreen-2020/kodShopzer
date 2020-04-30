@@ -43,7 +43,7 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
 
     cy
         .get('select[id="registration_country"]')
-        //.get('select [data-layer="Content"]')
+        //.get('select[data-layer="Content"]')
         .select('Sweden')
         .should('have.value', 'SE')
         .and('be.visible') // <<--- testar den rätt grej?
@@ -75,13 +75,12 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
 })
 
 
-
 Cypress.Commands.add('customerLoginAPI', (user, psw) => {
     cy.request({
         method:'POST',
         url:'http://localhost:8080/shop/customer/logon.html',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
         body: {
             'userName': user,
@@ -97,6 +96,40 @@ Cypress.Commands.add('customerLoginAPI', (user, psw) => {
         cy.getCookie('user').should('exist')
     });
 
+    //GUI CUSTOMER LOGIN:
+        // cy.visit('/shop/customer/customLogon.html')
+        // cy.get('#signin_userName').type(Cypress.env('email'))
+        // cy.get('#signin_password').type(Cypress.env('password') +'{enter}')
+        // cy.wait(700)
+        // cy.getCookie('user').should('exist')
+
+    
+    
+        /* FUNKAR EJ! PGA RE-DIRECTS ??  302 */
+    Cypress.Commands.add('adminLoginAPI', (user, psw) => {
+        cy.request({
+            method:'POST',
+            url:'http://localhost:8080/admin/performUserLogin',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                //'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBzaG9waXplci5jb20iLCJhdWQiOiJhcGkiLCJleHAiOjE1ODg4NzMzOTMsImlhdCI6MTU4ODI2ODU5M30.r05gWQ80112siT3ST1AJ0bCVNlaWbo1bmtNXDE_nhltXeJWuhJEaSeavGpPiVJvCSUqOHGFfZ-leTisPLbrk7A'
+            },
+            body: {
+                'userName': user,
+                'password': psw,
+                //'storeCode': 'DEFAULT'
+            }
+            })
+            .then((resp) =>
+            {
+                expect(resp.status).to.eq(200);
+            })
+            cy.getCookie('JSESSIONID').should('exist')
+        });
+
+
+//TODO: create and delete customer? - create and delete user? 
+//create and delete order? 
 
 //********************************************************************************* */
 
@@ -118,30 +151,3 @@ Cypress.Commands.add('loginAdmin', () => {
 
 //********************************************************************************* */
 
-/**
- * 
- * OBS! 
- * 
- * ALLT NEDAN ÄR MISSLYCKADE FÖRSÖK ATT FÅ TILL EN LOGIN-FEATURE. 
- * IGNORERA, ÄN SÅ LÄNGE... :(
- * 
- * 
- */
-
- /*
-import "cypress-localstorage-commands";
-
-Cypress.Commands.add('login', () => {
-
-
-    // cy.visit('/shop/customer/customLogon.html')
-    // cy.get('#signin_userName').type('tolvan@mailinator.com')
-    // cy.get('#signin_password').type('password12{enter}')
-    // cy.wait(700)
-    // cy.getCookie('user').should('exist')
-
-
-
-})
-
-*/
