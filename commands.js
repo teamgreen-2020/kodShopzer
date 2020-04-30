@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import { Agent } from "http"
+import { watchFile } from "fs"
 
 Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
 
@@ -41,7 +42,8 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
         .and('have.value', Cypress.env('last_name'))
 
     cy
-        .get('#registration_country')
+        .get('select[id="registration_country"]')
+        //.get('select [data-layer="Content"]')
         .select('Sweden')
         .should('have.value', 'SE')
         .and('be.visible') // <<--- testar den rätt grej?
@@ -72,6 +74,44 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
         .and('have.value', Cypress.env('password'))
 })
 
+
+
+// xit('Niklas test login GUI',  ()=> {
+//     cy.visit('http://localhost:8080/shop/customer/customLogon.html')
+//     cy.get('#signin_userName').type('tomas@helmfridsson.se')
+//     cy.get('#signin_password').type('password{enter}')
+//     cy.wait(700)
+//     cy.getCookie('user').should('exist')
+// });
+
+Cypress.Commands.add('customerLoginAPI', (user, psw) => {
+    cy.request({
+        method:'POST',
+        url:'http://localhost:8080/shop/customer/logon.html',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: {
+            'userName': user,
+            'password': psw,
+            'storeCode': 'DEFAULT'
+        }
+        })
+        .then((resp) =>
+        {
+            expect(resp.status).to.eq(200);
+            expect(resp.body).to.include(user);
+        })
+        cy.getCookie('user').should('exist')
+    });
+
+
+
+
+
+
+
+
 /**
  * 
  * OBS! 
@@ -82,39 +122,20 @@ Cypress.Commands.add('fillAndVerifyRegistrationForm', () => {
  * 
  */
 
-//import "cypress-localstorage-commands";
+ /*
+import "cypress-localstorage-commands";
 
 Cypress.Commands.add('login', () => {
 
-/*
-    cy.visit('/shop/customer/customLogon.html')
-    cy.get('#signin_userName').type('tolvan@mailinator.com')
-    cy.get('#signin_password').type('password12{enter}')
-  
-  */  
 
-    //login programmaticlly
-    cy.visit('/shop/customer/customLogon.html')
-    cy.request({
-        method: 'POST',
-        url: '/api/v1/customer/login',
-        body: {
-            "password": "password12",
-            "username": "tolvan@mailinator.com"
-        }
-    })
-   .then((resp) => {
-        //'jwt' eller 'Authorization'? 'token'? 'Bearer'? 'user'?
-        window.localStorage.setItem('jwt', resp.body.token)
-        //Cypress.Cookies.debug(true)
-    })
-
-    // cy.setCookie('user', 'DEFAULT_tolvan@mailinator.com')
-    // cy.setCookie('JSESSIONID', '360EE062FDF58DC3BA828508DBCA0264')
-    // cy.setCookie('cart', 'DEFAULT_efcbd4c91f1f40519b13bd509742cd23')
+    // cy.visit('/shop/customer/customLogon.html')
+    // cy.get('#signin_userName').type('tolvan@mailinator.com')
+    // cy.get('#signin_password').type('password12{enter}')
+    // cy.wait(700)
+    // cy.getCookie('user').should('exist')
 
 
-    //cy.getCookie('cypress-session-cookie').should('exist')  // <-- NULL! ????
 
 })
 
+*/
